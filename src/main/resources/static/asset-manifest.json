@@ -1,15 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.9b443fc2.css",
-    "main.js": "/static/js/main.e100679d.js",
+    "main.css": "/static/css/main.edf902da.css",
+    "main.js": "/static/js/main.3619b5e7.js",
     "static/js/787.de6ca2b5.chunk.js": "/static/js/787.de6ca2b5.chunk.js",
+    "static/media/배곧점.jpg": "/static/media/배곧점.278fcc0b0e552136eab1.jpg",
     "static/media/cinelivingroom.png": "/static/media/cinelivingroom.c6eaf9a1576ba424f90d.png",
     "static/media/cinedechef.png": "/static/media/cinedechef.8069cc56c05f8a4cd44f.png",
     "static/media/4dx.png": "/static/media/4dx.d4860f8716ebcc91d721.png",
     "static/media/suitecinema.png": "/static/media/suitecinema.cb7c1b54938bc225df27.png",
+    "static/media/강남점.jpg": "/static/media/강남점.744d10813e1c79702ca8.jpg",
     "static/media/movie3.jpg": "/static/media/movie3.21caf973110232e06999.jpg",
     "static/media/movie2.jpg": "/static/media/movie2.2545dcaf913a5207b024.jpg",
     "static/media/movie1.jpg": "/static/media/movie1.73d9aeeb3d2e27cc4463.jpg",
+    "static/media/시흥점.jpg": "/static/media/시흥점.7e522164cd9974dbca8f.jpg",
+    "static/media/구로점.jpg": "/static/media/구로점.173443ca552d09d79447.jpg",
+    "static/media/정왕점.jpg": "/static/media/정왕점.173443ca552d09d79447.jpg",
     "static/media/package1.jpg": "/static/media/package1.e80a7f9ada27402bb3da.jpg",
     "index.html": "/index.html",
     "static/media/user-mypage.svg": "/static/media/user-mypage.6de7a307b95c8da3481407dfb714247d.svg",
@@ -17,12 +22,12 @@
     "static/media/user-add.svg": "/static/media/user-add.ab98d60e612997c6998eb339996ba80c.svg",
     "static/media/user-lock.svg": "/static/media/user-lock.f5b600b350d2723e73cea7fadb19ed13.svg",
     "static/media/user-qna.svg": "/static/media/user-qna.a7bfe0c4e5aee46fc437e9fa75004469.svg",
-    "main.9b443fc2.css.map": "/static/css/main.9b443fc2.css.map",
-    "main.e100679d.js.map": "/static/js/main.e100679d.js.map",
+    "main.edf902da.css.map": "/static/css/main.edf902da.css.map",
+    "main.3619b5e7.js.map": "/static/js/main.3619b5e7.js.map",
     "787.de6ca2b5.chunk.js.map": "/static/js/787.de6ca2b5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9b443fc2.css",
-    "static/js/main.e100679d.js"
+    "static/css/main.edf902da.css",
+    "static/js/main.3619b5e7.js"
   ]
 }

@@ -1,6 +1,6 @@
-package com.example.user;
+package com.example.theater;
 
-// User.java
+// Theater.java
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,14 +10,16 @@ import lombok.Data;
 
 @Data
 @Entity
-public class User {
+public class Theater {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long theaterId;
 
-    private String username;
-    private String password;
+    private String theaterName;
+    private String location;
+    private int screeningHalls;
+    private int totalSeats;
+    private String phoneNumber;
 
 }
-
