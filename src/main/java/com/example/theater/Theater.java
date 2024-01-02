@@ -2,11 +2,12 @@ package com.example.theater;
 
 // Theater.java
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.movie.Movie;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -22,4 +23,8 @@ public class Theater {
     private int totalSeats;
     private String phoneNumber;
 
+
+    @OneToMany(mappedBy = "theater")
+    @JsonManagedReference
+    private List<Movie> movies;
 }
