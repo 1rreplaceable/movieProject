@@ -1,6 +1,7 @@
 package com.example.reservation;
 
 // ReservationController.java
+
 import com.example.movie.Movie;
 import com.example.schedule.Schedule;
 import com.example.theater.Theater;
@@ -26,10 +27,14 @@ public class ReservationController {
         return reservationService.getMoviesByTheater(theaterId);
     }
 
-    @GetMapping("/movies/{movieId}/schedules")
-    public List<Schedule> getSchedulesByMovie(@PathVariable Long movieId) {
-        return reservationService.getSchedulesByMovie(movieId);
+    @GetMapping("/theaters/{theaterId}/movies/{movieId}/schedules")
+    public List<Schedule> getSchedulesByMovieAndTheater(
+            @PathVariable Long theaterId,
+            @PathVariable Long movieId) {
+        System.out.println("Controller: getSchedulesByMovieAndTheater is called");
+        return reservationService.getMovieSchedulesByTheaterAndMovie(theaterId, movieId);
     }
+
 
     @PostMapping("/reservations")
     public Reservation submitReservation(@RequestBody Reservation reservationData) {

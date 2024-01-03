@@ -5,6 +5,7 @@ package com.example.reservation;
 import com.example.movie.Movie;
 import com.example.movie.MovieRepository;
 import com.example.schedule.Schedule;
+import com.example.schedule.ScheduleRepository;
 import com.example.theater.Theater;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,12 @@ import java.util.List;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private  final MovieRepository movieRepository;
+    private  final ScheduleRepository scheduleRepository;
     @Autowired
-    public ReservationService(ReservationRepository reservationRepository, MovieRepository movieRepository) {
+    public ReservationService(ReservationRepository reservationRepository, MovieRepository movieRepository, ScheduleRepository scheduleRepository) {
         this.reservationRepository = reservationRepository;
         this.movieRepository = movieRepository;
+        this.scheduleRepository = scheduleRepository;
     }
 
     public List<Theater> getAllTheaters() {
@@ -30,9 +33,9 @@ public class ReservationService {
         return movieRepository.findByTheaterTheaterId(theaterId);
     }
 
-    public List<Schedule> getSchedulesByMovie(Long movieId) {
-        // 여기에서 선택된 영화에 따른 상영 일정 목록을 가져오는 로직을 추가
-        return null;
+    public List<Schedule> getMovieSchedulesByTheaterAndMovie(Long theaterId, Long movieId) {
+        System.out.println("getMovieSchedulesByTheaterAndMovie 실행");
+        return scheduleRepository.findByTheaterIdAndMovieId(theaterId, movieId);
     }
 
     public Reservation submitReservation(Reservation reservationData) {

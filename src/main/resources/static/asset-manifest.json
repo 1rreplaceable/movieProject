@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.e9afb592.css",
-    "main.js": "/static/js/main.8848e3bc.js",
+    "main.css": "/static/css/main.79446c19.css",
+    "main.js": "/static/js/main.fd42ab8a.js",
     "static/js/787.de6ca2b5.chunk.js": "/static/js/787.de6ca2b5.chunk.js",
     "static/media/배곧점.jpg": "/static/media/배곧점.278fcc0b0e552136eab1.jpg",
     "static/media/cinelivingroom.png": "/static/media/cinelivingroom.c6eaf9a1576ba424f90d.png",
@@ -22,12 +22,12 @@
     "static/media/user-add.svg": "/static/media/user-add.ab98d60e612997c6998eb339996ba80c.svg",
     "static/media/user-lock.svg": "/static/media/user-lock.f5b600b350d2723e73cea7fadb19ed13.svg",
     "static/media/user-qna.svg": "/static/media/user-qna.a7bfe0c4e5aee46fc437e9fa75004469.svg",
-    "main.e9afb592.css.map": "/static/css/main.e9afb592.css.map",
-    "main.8848e3bc.js.map": "/static/js/main.8848e3bc.js.map",
+    "main.79446c19.css.map": "/static/css/main.79446c19.css.map",
+    "main.fd42ab8a.js.map": "/static/js/main.fd42ab8a.js.map",
     "787.de6ca2b5.chunk.js.map": "/static/js/787.de6ca2b5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e9afb592.css",
-    "static/js/main.8848e3bc.js"
+    "static/css/main.79446c19.css",
+    "static/js/main.fd42ab8a.js"
   ]
 }
