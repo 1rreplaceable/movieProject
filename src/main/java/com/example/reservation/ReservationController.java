@@ -4,11 +4,14 @@ package com.example.reservation;
 
 import com.example.movie.Movie;
 import com.example.schedule.Schedule;
+import com.example.seat.Seat;
 import com.example.theater.Theater;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reservation")
@@ -33,6 +36,27 @@ public class ReservationController {
             @PathVariable Long movieId) {
         System.out.println("Controller: getSchedulesByMovieAndTheater is called");
         return reservationService.getMovieSchedulesByTheaterAndMovie(theaterId, movieId);
+    }
+    // 좌석 및 예약된 좌석 조회 API
+    @GetMapping("/seats/{theaterId}/{movieId}/{scheduleId}")
+    public Map<String, List<Seat>> getSeatsAndReservedSeatsByTheaterMovieAndSchedule(
+            @PathVariable Long theaterId,
+            @PathVariable Long movieId,
+            @PathVariable Long scheduleId) {
+        return reservationService.getSeatsAndReservedSeatsByTheaterMovieAndSchedule(theaterId, movieId, scheduleId);
+    }
+
+    @PostMapping("/reserve")
+    public ResponseEntity<String> reserveSeats(@RequestBody List<Long> selectedSeats) {
+        System.out.println("reservation controller 넘어옴");
+        reservationService.reserveSeats(selectedSeats);
+        return ResponseEntity.ok("Seats reserved successfully");
+    }
+
+
+    @PostMapping("/cancel")
+    public void cancelReservation(@RequestBody List<Long> seatIds) {
+        reservationService.cancelReservation(seatIds);
     }
 
 
