@@ -7,6 +7,7 @@ import com.example.schedule.Schedule;
 import com.example.seat.Seat;
 import com.example.theater.Theater;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,11 +40,17 @@ public class ReservationController {
     }
     // 좌석 및 예약된 좌석 조회 API
     @GetMapping("/seats/{theaterId}/{movieId}/{scheduleId}")
-    public Map<String, List<Seat>> getSeatsAndReservedSeatsByTheaterMovieAndSchedule(
+    public ResponseEntity<Map<String, List<Seat>>> getSeatsAndReservedSeats(
             @PathVariable Long theaterId,
             @PathVariable Long movieId,
             @PathVariable Long scheduleId) {
-        return reservationService.getSeatsAndReservedSeatsByTheaterMovieAndSchedule(theaterId, movieId, scheduleId);
+        try {
+            Map<String, List<Seat>> seatData = reservationService.getSeatsAndReservedSeatsByTheaterMovieAndSchedule(theaterId, movieId, scheduleId);
+            return ResponseEntity.ok(seatData);
+        } catch (Exception e) {
+            // 예외 발생 시 적절한 응답을 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/reserve")
