@@ -68,8 +68,15 @@ public class ReservationController {
 
 
     @PostMapping("/reservations")
-    public Reservation submitReservation(@RequestBody Reservation reservationData) {
-        // 예약 데이터 처리 로직
-        return reservationService.submitReservation(reservationData);
+    public ResponseEntity<String> submitReservation(@RequestBody Reservation reservationData) {
+        System.out.println("예약버튼 잘 눌림");
+        try {
+            // 예약 데이터를 서비스로 전달하여 저장
+            reservationService.submitReservation(reservationData);
+            return ResponseEntity.ok("Reservation submitted successfully");
+        } catch (Exception e) {
+            // 예약 저장 중에 문제가 발생하면 적절한 응답 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error submitting reservation");
+        }
     }
 }

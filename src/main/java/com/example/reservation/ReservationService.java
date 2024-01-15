@@ -9,6 +9,8 @@ import com.example.schedule.ScheduleRepository;
 import com.example.seat.Seat;
 import com.example.seat.SeatRepository;
 import com.example.theater.Theater;
+import com.example.theater.TheaterRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +24,18 @@ public class ReservationService {
     private  final MovieRepository movieRepository;
     private  final ScheduleRepository scheduleRepository;
     private final SeatRepository seatRepository;
+    private final TheaterRepository theaterRepository;
     @Autowired
-    public ReservationService(ReservationRepository reservationRepository, MovieRepository movieRepository, ScheduleRepository scheduleRepository, SeatRepository seatRepository) {
+    public ReservationService(ReservationRepository reservationRepository, MovieRepository movieRepository, ScheduleRepository scheduleRepository, SeatRepository seatRepository, TheaterRepository theaterRepository) {
         this.reservationRepository = reservationRepository;
         this.movieRepository = movieRepository;
         this.scheduleRepository = scheduleRepository;
         this.seatRepository = seatRepository;
+        this.theaterRepository = theaterRepository;
     }
 
     public List<Theater> getAllTheaters() {
-        return reservationRepository.findAll();
+        return theaterRepository.findAll();
     }
 
     public List<Movie> getMoviesByTheater(Long theaterId) {
@@ -75,7 +79,30 @@ public class ReservationService {
 
 
     public Reservation submitReservation(Reservation reservationData) {
-        // 여기에서 예약 정보를 처리하고 저장하는 로직을 추가
-        return null;
+        System.out.println("예약 정보 전달 확인: " + reservationData.toString());
+
+        // 예약 정보 생성
+        Reservation reservation = new Reservation();
+        reservation.setTheaterId(reservationData.getTheaterId());
+        reservation.setMovieId(reservationData.getMovieId());
+        reservation.setScheduleId(reservationData.getScheduleId());
+        reservation.setSeats(reservationData.getSeats());
+
+        // 예약 정보 저장
+        reservationRepository.save(reservation);
+
+        // 저장된 예약 정보 반환 (이 부분을 원하는 대로 수정 가능)
+        List<Integer> seatNumbers = reservationData.getSeats();
+        for (Integer seatNumber : seatNumbers) {
+            Seat seat = seatRepository.findByTheaterIdAndMovieIdAndScheduleIdAndSeatNumber(
+                    reservationData.getTheaterId(),
+                    reservationData.getMovieId(),
+                    reservationData.getScheduleId(),
+                    seatNumber
+            ).orElseThrow(EntityNotFoundException::new);
+            seat.setReserved(true);
+            seatRepository.save(seat);
+        }
+        return reservation;
     }
 }

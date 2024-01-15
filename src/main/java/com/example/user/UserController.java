@@ -17,7 +17,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody User user) {
         System.out.println("Signup 요청 받음");
@@ -30,8 +30,7 @@ public class UserController {
         userService.registerUser(user);
         return ResponseEntity.ok("회원가입 성공");
     }
-
-    // UserController.java
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user, HttpSession session) {
         Optional<User> optionalUser = userService.findByUsername(user.getUsername());
@@ -50,7 +49,7 @@ public class UserController {
             return ResponseEntity.badRequest().body("존재하지 않는 사용자");
         }
     }
-
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
         // 세션 무효화
