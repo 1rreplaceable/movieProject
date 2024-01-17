@@ -22,7 +22,7 @@ public class Theater {
     private int screeningHalls;
     private int totalSeats;
     private String phoneNumber;
-
+    private String theaterImageUrl;
 
     @OneToMany(mappedBy = "theater")
     @JsonManagedReference
