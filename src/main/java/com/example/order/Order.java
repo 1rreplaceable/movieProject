@@ -3,8 +3,8 @@ package com.example.order;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -17,18 +17,20 @@ public class Order {
     private Long orderId;
 
     @Column(name = "user_id")
-    private Long userId;
+    private String userId;
 
-    @Column(name = "total_price")
-    private int totalPrice;
+    @Column(name = "product_id")
+    private Long productId;
+
+    @Column(name = "product_price")
+    private int productPrice;
+
+    @Column(name = "quantity")
+    private int quantity;
 
     @Column(name = "order_date")
     private Date orderDate;
 
     @Column(name = "is_ordered")
     private boolean isOrdered;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetails;
-
 }

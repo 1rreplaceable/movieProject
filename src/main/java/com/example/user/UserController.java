@@ -51,12 +51,7 @@ public class UserController {
                 // 로그인 성공 시 세션에 사용자 정보 저장
                 session.setAttribute("user", storedUser);
 
-                // 쿠키 생성 및 클라이언트에 전송
-                Cookie userCookie = new Cookie("userId", storedUser.getId().toString());
-                userCookie.setMaxAge(60 * 60 * 24); // 쿠키 유효 기간 설정 (예: 1일)
-                response.addCookie(userCookie);
-
-                return ResponseEntity.ok("로그인 성공"+storedUser);
+                return ResponseEntity.ok(storedUser.getId()+"");
             } else {
                 return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
             }
@@ -70,11 +65,17 @@ public class UserController {
         // 세션 무효화
         session.invalidate();
 
-        Cookie cookie = new Cookie("userId", null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
         return ResponseEntity.ok("로그아웃 성공");
     }
+
+    @GetMapping("/check-login")
+    public ResponseEntity<Boolean> checkLogin(HttpSession httpSession) {
+        // 세션에서 사용자 정보를 확인하고 로그인 상태를 반환
+        User user = (User) httpSession.getAttribute("user");
+        boolean isLoggedIn = user != null;
+        return ResponseEntity.ok(isLoggedIn);
+    }
+
 
 }
 

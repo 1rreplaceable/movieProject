@@ -1,11 +1,14 @@
 package com.example.order;
 
+import com.example.user.User;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -15,15 +18,46 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private HttpSession httpSession;
-
     @PostMapping
-    public void createOrUpdateOrder(@RequestBody OrderRequest orderRequest) {
-        Long productId = orderRequest.getProductId();
-        Integer quantity = orderRequest.getQuantity();
-        Integer totalPrice = orderRequest.getTotalPrice();
+    public ResponseEntity<String> createOrUpdateOrder(@RequestBody OrderRequest orderRequest) {
+        try {
+            Long productId = orderRequest.getProductId();
+            Integer quantity = orderRequest.getQuantity();
+            orderService.createOrUpdateOrder(productId, quantity);
+            return ResponseEntity.ok("Order created or updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating or updating order");
+        }
+    }
 
-        orderService.createOrUpdateOrder(productId, quantity, totalPrice);
+    @PostMapping("/delete")
+    @Transactional
+    public ResponseEntity<String> deleteSelectedItems(
+            @RequestBody List<Long> productIds,
+            HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        System.out.println("OrderController-User:"+user);
+        System.out.println(productIds);
+        try {
+            orderService.deleteItems(productIds, user.getId().toString());
+            return ResponseEntity.ok("Items deleted successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting items");
+        }
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getCartCount(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+
+        if (user != null) {
+            int cartCount = orderService.getCartCount(user.getId().toString());
+
+            return ResponseEntity.ok(cartCount);
+        }
+
+        // If user is not logged in, return 0
+        return ResponseEntity.ok(0);
     }
 }
