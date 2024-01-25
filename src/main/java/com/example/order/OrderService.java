@@ -87,5 +87,10 @@ public class OrderService {
         return orderRepository.countTotalProductsByUserId(userId);
     }
 
+    @Transactional
+    public void updateOrder(List<Long> selectedProductIds, Long userId) {
+        // orders 테이블 업데이트 로직 구현
+        orderRepository.updateOrder(selectedProductIds, userId);
+    }
 
 }

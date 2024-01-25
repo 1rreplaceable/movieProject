@@ -60,4 +60,16 @@ public class OrderController {
         // If user is not logged in, return 0
         return ResponseEntity.ok(0);
     }
+    @PostMapping("/purchase")
+    public ResponseEntity<String> purchase(@RequestBody List<Long> selectedProductIds, HttpSession session) {
+        System.out.println("OrderController=purchase 넘어옴");
+        User user = (User) session.getAttribute("user");
+
+        try {
+            orderService.updateOrder(selectedProductIds, user.getId());
+            return ResponseEntity.ok("구매가 완료되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("구매에 실패했습니다.");
+        }
+    }
 }
