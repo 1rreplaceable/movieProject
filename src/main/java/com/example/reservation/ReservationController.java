@@ -6,6 +6,8 @@ import com.example.movie.Movie;
 import com.example.schedule.Schedule;
 import com.example.seat.Seat;
 import com.example.theater.Theater;
+import com.example.user.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,15 +70,32 @@ public class ReservationController {
 
 
     @PostMapping("/reservations")
-    public ResponseEntity<String> submitReservation(@RequestBody Reservation reservationData) {
+    public ResponseEntity<String> submitReservation(@RequestBody Reservation reservationData, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
         System.out.println("예약버튼 잘 눌림");
         try {
-            // 예약 데이터를 서비스로 전달하여 저장
-            reservationService.submitReservation(reservationData);
+            reservationService.submitReservation(reservationData,user.getId());
             return ResponseEntity.ok("Reservation submitted successfully");
         } catch (Exception e) {
-            // 예약 저장 중에 문제가 발생하면 적절한 응답 반환
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error submitting reservation");
+        }
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<ReservationDTO>> getReservationsByUserId(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        List<ReservationDTO> reservations = reservationService.getReservationsByUserId(user.getId());
+        return ResponseEntity.ok(reservations);
+    }
+
+    @DeleteMapping("/{reservationId}")
+    public ResponseEntity<?> cancelReservation(@PathVariable Long reservationId) {
+        try {
+            // 예약 취소 로직 수행
+            reservationService.cancelReservation(reservationId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

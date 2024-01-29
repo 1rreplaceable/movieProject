@@ -76,6 +76,33 @@ public class UserController {
         return ResponseEntity.ok(isLoggedIn);
     }
 
+    @GetMapping("/info")
+    public ResponseEntity<User> getUserInfo(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        Optional<User> currentUser = userService.getCurrentUser(user.getId());
+        return currentUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<User> updateUserInfo(HttpSession httpSession, @RequestBody User updatedUser) {
+        User user = (User) httpSession.getAttribute("user");
+        Optional<User> currentUser = userService.getCurrentUser(user.getId());
+        if (currentUser.isPresent()) {
+            User existingUser = currentUser.get();
+            existingUser.setUsername(updatedUser.getUsername());
+            existingUser.setPassword(updatedUser.getPassword());
+            userService.updateUser(existingUser);
+            return ResponseEntity.ok(existingUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/id")
+    public String getUserIdFromSession(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        return user.getUsername();
+    }
 
 }
 
