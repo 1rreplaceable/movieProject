@@ -45,39 +45,31 @@ public class OrderService {
     }
 
     public List<Cart> getCartItemsByUserId(String userId) {
-        // 주문 정보 조회
-        List<Order> orders = orderRepository.findByUserId(userId);
+        // 장바구니에 있는 상품 중 is_ordered가 false인 것만 가져오기
+        List<Order> orders = orderRepository.findCartItemsByUserId(userId);
 
-        // 주문 정보를 바탕으로 Cart 리스트 생성
-        Map<Long, Cart> cartMap = new HashMap<>();
+        // 장바구니 아이템 목록 생성
+        List<Cart> cartItems = new ArrayList<>();
 
         for (Order order : orders) {
-            Product product = productService.getProductById(order.getProductId()).orElseThrow();
+            Product product = productService.getProductById(order.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found with id: " + order.getProductId()));
 
-            // 이미 해당 상품에 대한 Cart가 존재하는 경우 수량을 더함
-            if (cartMap.containsKey(product.getProductId())) {
-                Cart existingCart = cartMap.get(product.getProductId());
-                existingCart.setQuantity(existingCart.getQuantity() + order.getQuantity());
-            } else {
-                // 해당 상품에 대한 Cart가 존재하지 않는 경우 새로운 Cart 생성
-                Cart newCart = new Cart(
-                        product.getProductId(),
-                        product.getImagePath(),
-                        product.getProductName(),
-                        product.getProductDetail(),
-                        order.getQuantity(),
-                        product.getPrice()
-                );
-                cartMap.put(product.getProductId(), newCart);
-            }
+            // 해당 상품에 대한 장바구니 아이템 생성
+            Cart cartItem = new Cart(
+                    product.getProductId(),
+                    product.getImagePath(),
+                    product.getProductName(),
+                    product.getProductDetail(),
+                    order.getQuantity(),
+                    product.getPrice()
+            );
+
+            cartItems.add(cartItem);
         }
-
-        // Map의 값들을 리스트로 변환
-        List<Cart> cartItems = new ArrayList<>(cartMap.values());
 
         return cartItems;
     }
-
     @Transactional
     public void deleteItems(List<Long> productIds, String userId) {
         orderRepository.deleteByProductIdInAndUserId(productIds, userId);
@@ -91,6 +83,32 @@ public class OrderService {
     public void updateOrder(List<Long> selectedProductIds, Long userId) {
         // orders 테이블 업데이트 로직 구현
         orderRepository.updateOrder(selectedProductIds, userId);
+    }
+
+    public List<Cart> getCompletedOrdersByUserId(String userId) {
+        // 주문 정보 조회 (is_ordered가 true인 것만)
+        List<Order> completedOrders = orderRepository.findByUserIdAndIsOrderedTrue(userId);
+
+        // 카트 아이템 리스트 생성
+        List<Cart> completedOrderItems = new ArrayList<>();
+
+        for (Order order : completedOrders) {
+            Product product = productService.getProductById(order.getProductId()).orElseThrow();
+
+            // 완료된 주문에 대한 카트 아이템 생성
+            Cart cartItem = new Cart(
+                    order.getProductId(),
+                    product.getImagePath(),
+                    product.getProductName(),
+                    product.getProductDetail(),
+                    order.getQuantity(),
+                    product.getPrice()
+            );
+
+            completedOrderItems.add(cartItem);
+        }
+
+        return completedOrderItems;
     }
 
 }

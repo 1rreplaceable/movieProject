@@ -1,5 +1,6 @@
 package com.example.order;
 
+import com.example.order.cart.Cart;
 import com.example.user.User;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -61,9 +62,9 @@ public class OrderController {
         return ResponseEntity.ok(0);
     }
     @PostMapping("/purchase")
-    public ResponseEntity<String> purchase(@RequestBody List<Long> selectedProductIds, HttpSession session) {
+    public ResponseEntity<String> purchase(@RequestBody List<Long> selectedProductIds, HttpSession httpSession) {
         System.out.println("OrderController=purchase 넘어옴");
-        User user = (User) session.getAttribute("user");
+        User user = (User) httpSession.getAttribute("user");
 
         try {
             orderService.updateOrder(selectedProductIds, user.getId());
@@ -71,5 +72,12 @@ public class OrderController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("구매에 실패했습니다.");
         }
+    }
+    @GetMapping("/completed-orders")
+    public List<Cart> getCompletedOrders( HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        String userId = String.valueOf(user.getId());
+
+        return orderService.getCompletedOrdersByUserId(userId);
     }
 }
